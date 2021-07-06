@@ -1,24 +1,15 @@
-# :package_description
+# A trait that allows you to clone readonly properties in PHP 8.1
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/vendor_slug/package_slug.svg?style=flat-square)](https://packagist.org/packages/vendor_slug/package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/vendor_slug/package_slug/run-tests?label=tests)](https://github.com/vendor_slug/package_slug/actions?query=workflow%3ATests+branch%3Amaster)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/vendor_slug/package_slug/Check%20&%20fix%20styling?label=code%20style)](https://github.com/vendor_slug/package_slug/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
-[![Total Downloads](https://img.shields.io/packagist/dt/vendor_slug/package_slug.svg?style=flat-square)](https://packagist.org/packages/vendor_slug/package_slug)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/php_cloneable.svg?style=flat-square)](https://packagist.org/packages/spatie/php_cloneable)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spatie/php_cloneable/run-tests?label=tests)](https://github.com/spatie/php_cloneable/actions?query=workflow%3ATests+branch%3Amaster)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/spatie/php_cloneable/Check%20&%20fix%20styling?label=code%20style)](https://github.com/spatie/php_cloneable/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
+[![Total Downloads](https://img.shields.io/packagist/dt/spatie/php_cloneable.svg?style=flat-square)](https://packagist.org/packages/spatie/php_cloneable)
 
----
-This package can be used as to scaffold a Laravel package. Follow these steps to get started:
-
-1. Press the "Use template" button at the top of this repo to create a new repo with the contents of this skeleton
-2. Run "./configure.sh" to run a script that will replace all placeholders throughout all the files
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-
-This is where your description should go. Try and limit it to a paragraph or two. Consider adding a small example.
+This package provides a trait that allows you to clone objects with readonly properties in PHP 8.1.
 
 ## Support us
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
+[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/php-cloneable.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/php-cloneable)
 
 We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
 
@@ -29,15 +20,62 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 You can install the package via composer:
 
 ```bash
-composer require vendor_slug/package_slug
+composer require spatie/php-cloneable
 ```
 
 ## Usage
 
+In PHP 8.1, readonly properties aren't allowed to be overridden as soon as they are initialized. That also means that cloning an object and changing one of its readonly properties isn't allowed. It's likely that PHP will get some kind of `clone with` functionality in the future, but for now you can work around this issue by using this package.
+
 ```php
-$skeleton = new VendorName\Skeleton();
-echo $skeleton->echoPhrase('Hello, VendorName!');
+class Post
+{
+    use Cloneable;
+
+    public readonly string $title;
+    
+    public readonly string $author;
+
+    public function __construct(string $title, string $author)
+    {
+        $this->title = $title;
+        $this->author = $author;
+    }
+}
 ```
+
+The `Spatie\Cloneable\Cloneable` adds a `with` method to whatever class you want to be cloneable, which you can pass one or more parameters. Note that you're required to use named arguments.
+
+```php
+$postA = new Post(title: 'a', author: 'Brent');
+
+$postB = $postA->with(title: 'b');
+$postC = $postA->with(title: 'c', author: 'Freek');
+```
+
+A common practice would be to implement specific `with*` methods on the classes themselves:
+
+```php
+class Post
+{
+    // …
+
+    public function withTitle(string $title): self
+    {
+        return $this->with(title: $title);
+    }
+
+    public function withAuthor(string $author): self
+    {
+        return $this->with(author: $author);
+    }
+}
+```
+
+### Caveats
+
+- This package will skip calling the constructor when cloning an object, meaning any logic in the constructor won't be executed.
+- The `with` method will de a shallow clone, meaning that nested objects aren't cloned as well.
 
 ## Testing
 
@@ -59,7 +97,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Brent Roose](https://github.com/brendt_gd)
 - [All Contributors](../../contributors)
 
 ## License
