@@ -5,7 +5,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/spatie/php_cloneable/Check%20&%20fix%20styling?label=code%20style)](https://github.com/spatie/php_cloneable/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/php_cloneable.svg?style=flat-square)](https://packagist.org/packages/spatie/php_cloneable)
 
-This package provides a trait that allows you to clone objects with readonly properties in PHP 8.1.
+This package provides a trait that allows you to clone objects with readonly properties in PHP 8.1. You can read an in-depth explanation as to why this is necessary [here](https://stitcher.io/blog/cloning-readonly-properties-in-php-81).
 
 ## Support us
 

@@ -23,9 +23,7 @@ class Post
 {
     use Cloneable;
 
-    public readonly string $title;
-
-    public function __construct(string $title)
+    public function __construct(public readonly string $title)
     {
         $this->title = $title;
     }
