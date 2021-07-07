@@ -17,15 +17,26 @@ class CloneableTest extends TestCase
         $this->assertEquals('a', $postA->title);
         $this->assertEquals('b', $postB->title);
     }
+
+    /** @test */
+    public function it_works_with_null_values()
+    {
+        $postA = new Post(title: 'a', nullable: 'a');
+
+        $postB = $postA->with(nullable: null);
+
+        $this->assertNull($postB->nullable);
+    }
 }
 
 class Post
 {
     use Cloneable;
 
-    public function __construct(public readonly string $title)
-    {
-        $this->title = $title;
+    public function __construct(
+        public readonly string $title,
+        public readonly ?string $nullable = null,
+    ) {
     }
 
     public function withTitle(string $title): self

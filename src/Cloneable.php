@@ -11,7 +11,7 @@ trait Cloneable
         $clone = (new ReflectionClass(static::class))->newInstanceWithoutConstructor();
 
         foreach ($this as $objectField => $objectValue) {
-            $objectValue = $values[$objectField] ?? $objectValue;
+            $objectValue = array_key_exists($objectField, $values) ? $values[$objectField] : $objectValue;
 
             $clone->$objectField = $objectValue;
         }
