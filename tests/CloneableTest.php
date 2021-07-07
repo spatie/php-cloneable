@@ -14,8 +14,19 @@ class CloneableTest extends TestCase
 
         $postB = $postA->with(title: 'b');
 
-        $this->assertEquals('a', $postA->title);
-        $this->assertEquals('b', $postB->title);
+        $this->assertSame('a', $postA->title);
+        $this->assertSame('b', $postB->title);
+    }
+
+    /** @test */
+    public function it_can_clone_and_set_null()
+    {
+        $postA = new Post('a', 'Maria');
+
+        $postB = $postA->with(author: null);
+
+        $this->assertSame('Maria', $postA->author);
+        $this->assertSame(null, $postB->author);
     }
 }
 
@@ -23,13 +34,9 @@ class Post
 {
     use Cloneable;
 
-    public function __construct(public readonly string $title)
-    {
-        $this->title = $title;
-    }
-
-    public function withTitle(string $title): self
-    {
-        return $this->with(title: $title);
+    public function __construct(
+        public readonly string $title,
+        public readonly ?string $author = null,
+    ) {
     }
 }
