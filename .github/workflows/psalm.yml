@@ -23,7 +23,6 @@ jobs:
         uses: ramsey/composer-install@v1
         with:
           composer-options: --optimize-autoloader
-          dependency-versions: ${{ matrix.stability }}
 
       - name: Run psalm
         run: ./vendor/bin/psalm --output-format=github
