@@ -75,7 +75,7 @@ class Post
 ### Caveats
 
 - This package will skip calling the constructor when cloning an object, meaning any logic in the constructor won't be executed.
-- The `with` method will de a shallow clone, meaning that nested objects aren't cloned as well.
+- The `with` method will do a shallow clone, meaning that nested objects aren't cloned as well.
 
 ## Testing
 
