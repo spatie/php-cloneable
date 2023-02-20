@@ -33,9 +33,7 @@ class InheritedCloneable extends InheritedCloneableBase
     public function __construct(
         string $a,
         public readonly string $b
-    )
-    {
+    ) {
         parent::__construct($a);
     }
-
 }
