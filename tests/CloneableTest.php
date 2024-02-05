@@ -27,11 +27,36 @@ class CloneableTest extends TestCase
 
         $this->assertNull($postB->nullable);
     }
+
+    /** @test */
+    public function it_can_set_uninitialised_values()
+    {
+        $postA = new Post('a');
+
+        $postB = $postA->with(uninitialised: 'Now initialised');
+
+        $this->assertFalse(isset($postA->uninitialised));
+        $this->assertEquals('Now initialised', $postB->uninitialised);
+    }
+
+    /** @test */
+    public function it_does_not_modify_static_properties()
+    {
+        $postA = new Post('a');
+        Post::$counter = 42;
+
+        $postA->with(title: 'b');
+
+        $this->assertEquals(42, Post::$counter);
+    }
 }
 
 class Post
 {
     use Cloneable;
+
+    public readonly string $uninitialised;
+    public static int $counter = 0;
 
     public function __construct(
         public readonly string $title,
